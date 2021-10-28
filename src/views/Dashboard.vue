@@ -6,7 +6,7 @@
           <router-link to="/">Home</router-link>
         </div>
         <div class="navbar-link-item">
-          <router-link to="/">Working Times</router-link>
+          <router-link to="/workingtimes">Working Times</router-link>
         </div>
         <div class="navbar-link-item">
           <router-link to="/">Clock Manager</router-link>
@@ -24,7 +24,7 @@
 
     <div id="dashboard-container">
       <div class="dashboard-left">
-        <User style="height: 300px"/>
+        <User style="height: 350px"/>
       </div>
       <div class="dashboard-right">
         <router-view/>

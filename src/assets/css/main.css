@@ -65,6 +65,7 @@ input {
     cursor: pointer;
     background: #44BBA4;
     color: white;
+    margin: 10px;
 }
 .form-action-button:hover {
     box-shadow: 0px 10px 10px;

@@ -16,10 +16,15 @@
                 <label for="">Email : </label>
                 <input v-model="email" type="text">
             </div>
-            <div class="form-row">
+            <div class="form-row form-row-wrap">
                 <button class="form-action-button" v-on:click="createUser()">Create</button>
                 <button class="form-action-button" v-on:click="updateUser()">Update</button>
+                <button class="form-action-button">Get Infos</button>
                 <button class="form-action-button">Delete</button>
+                <button class="form-action-button" v-on:click="connect()" style="background:#E7BB41">Connect</button>
+            </div>
+            <div class="form-row" v-if="connected">
+                <p>Connected as {{connectedUsername}}</p>
             </div>
         </div>
     </div>
@@ -36,7 +41,9 @@ export default {
     return {
         username : "",
         email : "",
-        id : null
+        id : "",
+        connected : false,
+        connectedUsername: ""
     }
   },
   updated() {
@@ -98,6 +105,37 @@ export default {
         if(this.email == "" || this.username == "") return "Username and email must not be blank";
         else if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.exec(this.email) == null) return "Incorrect email format";
         else return null;
+    },
+    async connect() {
+        if (this.id != "") { //Connect by ID
+            const response = await fetch("http://localhost:4000/api/users/"+this.id);            
+            const data = await response.json();
+            if(response.status == 404) {
+                alert("Wrong user ID")
+            } else if (response.status == 200) {
+                this.setConnected(data.data)
+            }
+        } else if (this.id == "" && this.checkUsernameAndEmail() == null) { //Connect by Username and email
+            const response = await fetch(`http://localhost:4000/api/users?username=${this.username}&email=${this.email}`);            
+            const data = await response.json();
+            if(response.status == 404) {
+                alert("Wrong user email or username")
+            } else if (response.status == 200) {
+                this.setConnected(data.data)
+            }
+        } else {
+            if (this.id == "") {
+                alert(this.checkUsernameAndEmail());
+                return;
+            } else if (this.checkUsernameAndEmail() != null) {
+                alert("ID must not be blank")
+            }
+        }
+    },
+    setConnected : function (data) {
+        this.connected = true;
+        this.connectedUsername = data.username
+        localStorage.setItem("userId", data.id)
     }
   }
 }
@@ -115,6 +153,9 @@ export default {
     align-items: center;
     height: 100%;
     justify-content: space-around;
+}
+.form-row.form-row-wrap {
+    flex-wrap: wrap;
 }
 .form-container .form-row label {
     width: 30%;
