@@ -19,8 +19,8 @@
             <div class="form-row form-row-wrap">
                 <button class="form-action-button" v-on:click="createUser()">Create</button>
                 <button class="form-action-button" v-on:click="updateUser()">Update</button>
-                <button class="form-action-button">Get Infos</button>
-                <button class="form-action-button">Delete</button>
+                <button class="form-action-button" v-on:click="getInfos()">Get Infos</button>
+                <button class="form-action-button" v-on:click="deleteUser()">Delete</button>
                 <button class="form-action-button" v-on:click="connect()" style="background:#E7BB41">Connect</button>
             </div>
             <div class="form-row" v-if="connected">
@@ -83,6 +83,7 @@ export default {
             return;
         } else if (this.id == "") {
             alert("ID must not be blank")
+            return;
         }
             
         const requestOptions = {
@@ -101,6 +102,34 @@ export default {
             alert("Successful update")
         }
     },
+    getInfos : async function () {
+        if (this.id == "") {
+            alert("ID must not be blank")
+            return;
+        }
+        const response = await fetch(`http://localhost:4000/api/users/${this.id}`);
+        const data = await response.json();
+        this.username = data.data.username;
+        this.email = data.data.email;
+    },
+    async deleteUser() {
+        if (this.id == "") {
+            alert("ID must not be blank")
+            return;
+        }
+        const requestOptions = {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+        };
+        const response = await fetch("http://localhost:4000/api/users/"+this.id, requestOptions);
+        if(response.status == 204) {
+            alert("User deleted successfuly")
+        } else if (response.status == 404) {
+            alert("User not found")
+        } else {
+            alert("An error occured")
+        }
+    },  
     checkUsernameAndEmail() {
         if(this.email == "" || this.username == "") return "Username and email must not be blank";
         else if (/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.exec(this.email) == null) return "Incorrect email format";
@@ -133,9 +162,15 @@ export default {
         }
     },
     setConnected : function (data) {
+        this.getInfos();
         this.connected = true;
         this.connectedUsername = data.username
         localStorage.setItem("userId", data.id)
+    },
+    setDisconnected : function () {
+        this.connected = false;
+        this.connectedUsername = "";
+        localStorage.removeItem("userId")
     }
   }
 }
