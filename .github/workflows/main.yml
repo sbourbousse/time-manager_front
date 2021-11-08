@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 13.x
 
-      - name: Install Capacitor
+      - name: Install Cordova
         run: npm i -g cordova
 
       - name: Install app dependencies
@@ -34,7 +34,7 @@ jobs:
         run: cd timemanager
 
       - name: Add to android
-        run: cordova add android
+        run: cordova platform add android
 
       - name: Build the APK
         run: cordova build android --release
