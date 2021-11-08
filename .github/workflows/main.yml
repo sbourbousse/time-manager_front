@@ -30,21 +30,32 @@ jobs:
       - name: build the app
         run: npm run build
 
-      - name: Add to android
-        working-directory: ./timemanager
-        run: cordova platform add android
-
+      - name: Change directory cordova
+        run: cd ./timemanager
+        
+      - name: Use oxr463/setup-cordova
+        uses: oxr463/setup-cordova@0.0.2
+        with:
+          exec: |
+            cordova platform add android && \
+            cordova build --no-telemetry && \
+            cp "$(find . -name '*.apk')" .
+            
+      #- name: Add to android
+      #  working-directory: ./timemanager
+      #  run: cordova platform add android
+        
       #- name: Build the APK
       #  working-directory: ./timemanager/platforms/android
       #  run: gradle build
 
-      - uses: gradle/gradle-build-action@v2
-        with:
-          gradle-version: 1.9
-          build-root-directory: /apk/
+      #- uses: gradle/gradle-build-action@v2
+      #  with:
+      #    gradle-version: 1.9
+      #    build-root-directory: /apk/
         
-      - name: Upload dev APK
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-dev
-          path: /apk/app.apk
+      #- name: Upload dev APK
+      #  uses: actions/upload-artifact@v1
+      #  with:
+      #    name: app-dev
+      #    path: /apk/app.apk
