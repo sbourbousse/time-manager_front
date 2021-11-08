@@ -30,17 +30,16 @@ jobs:
       - name: build the app
         run: npm run build
 
-      - name: Go to cordova folder
-        run: cd timemanager
-
       - name: Add to android
+        working-directory: ./timemanager
         run: cordova platform add android
 
       - name: Build the APK
+        working-directory: ./timemanager
         run: cordova build android --release
 
       - name: Upload dev APK
         uses: actions/upload-artifact@v1
         with:
           name: app-dev
-          path: platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: timemanager/platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk
