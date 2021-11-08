@@ -36,6 +36,7 @@ jobs:
       - name: Use oxr463/setup-cordova
         uses: oxr463/setup-cordova@0.0.2
         with:
+          working-directory: ./timemanager
           exec: |
             cordova platform add android && \
             cordova build --no-telemetry && \
