@@ -47,4 +47,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app-dev
-          path: /apk/
+          path: /apk/app.apk
