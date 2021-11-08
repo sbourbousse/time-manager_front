@@ -3,6 +3,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '../components/Welcome.vue';
 import WorkingTimes from '../components/WorkingTimes.vue';
 
+function navGuard (to, from, next) {
+  console.log(to);
+  console.log(from)
+  console.log(next)
+}
+
 const routes = [
   {
     path: '/',
@@ -12,7 +18,8 @@ const routes = [
   {
     path: '/workingtimes',
     name: 'Working Times',
-    component: WorkingTimes
+    component: WorkingTimes,
+    beforeEnter : navGuard
   }
 ]
 
