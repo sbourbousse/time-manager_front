@@ -35,8 +35,8 @@ jobs:
         run: cordova platform add android
 
       - name: Build the APK
-        working-directory: ./timemanager
-        run: cordova build android --release
+        working-directory: ./timemanager/platforms/android
+        run: gradle build
 
       - name: Upload dev APK
         uses: actions/upload-artifact@v1
