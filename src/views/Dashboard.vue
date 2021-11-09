@@ -4,19 +4,19 @@
       <div class="navbar-link-container">
         <div class="navbar-link-item">
           <router-link class="link-item-text" to="/">Home</router-link>
-          <fa class="link-item-icon" icon="home"/>
+          <router-link to="/"><fa class="link-item-icon" icon="home"/></router-link>
         </div>
         <div class="navbar-link-item">
           <router-link class="link-item-text" to="/workingtimes">Working Times</router-link>
-          <fa class="link-item-icon" icon="user-clock"/>
+          <router-link to="/workingtimes"><fa class="link-item-icon" icon="user-clock"/></router-link> 
         </div>
         <div class="navbar-link-item">
-          <router-link class="link-item-text" to="/">Clock Manager</router-link>
-          <fa class="link-item-icon" icon="stopwatch"/>
+          <router-link class="link-item-text" to="/clock">Clock Manager</router-link>
+          <router-link to="/clock"><fa class="link-item-icon" icon="stopwatch"/></router-link>
         </div>
         <div class="navbar-link-item">
           <router-link class="link-item-text" to="/">Chart Manager</router-link>
-          <fa class="link-item-icon" icon="chart-pie"/>
+          <router-link to="/"><fa class="link-item-icon" icon="chart-pie"/></router-link>
         </div>
       </div>
       <div class="navbar-right">
@@ -164,10 +164,11 @@ export default {
       height: calc(100% - 80px) /* Navbars height */;
     }
     #dashboard-container .dashboard-left {
-      width : 30%;
+      width : 600px;
     }
     #dashboard-container .dashboard-right {
-      width : 70%;
+      width: auto;
+      padding-left: 4em;
     }
     .navbar-link-container .link-item-text {
       display: unset;

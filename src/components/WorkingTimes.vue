@@ -37,7 +37,6 @@ export default {
 </script>
 <style>
     #working-times-container {
-        margin-left: 50px;
         height: 100%;
         display: flex;
         flex-wrap: wrap;
@@ -45,7 +44,20 @@ export default {
     }
     #working-times-container .single-working-time {
         height: 200px;
-        width: 200px; 
         margin: 20px;
+    }
+
+    @media screen and (min-width: 640px) {
+        #working-times-container {
+        margin-left: 50px;
+        }
+        #working-times-container .single-working-time {
+            width: 200px; 
+        }
+    }
+    @media screen and (max-width: 640px) {
+        #working-times-container .single-working-time {
+            width: calc(50% - 40px); 
+        }
     }
 </style>

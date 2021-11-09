@@ -166,6 +166,7 @@ export default {
     disconnect: function () {
         localStorage.removeItem("userId");
         this.connected = false;
+        this.$router.go("/")
     },
     checkConnected : function () {
         let userId = localStorage.getItem("userId");

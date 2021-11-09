@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '../components/Welcome.vue';
 import WorkingTimes from '../components/WorkingTimes.vue';
+import Clock from '../components/Clock.vue';
 
 function navGuard (to, from, next) {
   console.log(to);
@@ -25,7 +26,14 @@ const routes = [
     name: 'Working Times',
     component: WorkingTimes,
     beforeEnter : navGuard
+  },
+  {
+    path: '/clock',
+    name: 'Clock',
+    component: Clock,
+    beforeEnter : navGuard
   }
+
 ]
 
 const router = createRouter({
