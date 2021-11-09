@@ -21,7 +21,8 @@
                 <button class="form-action-button" v-on:click="updateUser()">Update</button>
                 <button class="form-action-button" v-on:click="getInfos()">Get Infos</button>
                 <button class="form-action-button" v-on:click="deleteUser()">Delete</button>
-                <button class="form-action-button" v-on:click="connect()" style="background:#E7BB41">Connect</button>
+                <button class="form-action-button" v-if="!connected" v-on:click="connect()" style="background:#E7BB41">Connect</button>
+                <button class="form-action-button" v-if="connected" v-on:click="disconnect()" style="background:#E7BB41">Disconnect</button>
             </div>
             <div class="form-row" v-if="connected">
                 <p>Connected as {{connectedUsername}}</p>
@@ -50,6 +51,7 @@ export default {
       console.log("update")
   },
   mounted() {
+      this.autoConnect();
   },
   props: {
     // today: Date
@@ -159,6 +161,24 @@ export default {
             } else if (this.checkUsernameAndEmail() != null) {
                 alert("ID must not be blank")
             }
+        }
+    },
+    disconnect: function () {
+        localStorage.removeItem("userId");
+        this.connected = false;
+    },
+    checkConnected : function () {
+        let userId = localStorage.getItem("userId");
+        if (userId) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+    autoConnect: async function () {
+        if(this.checkConnected()) {
+            this.id = localStorage.getItem("userId")
+            this.connect();
         }
     },
     setConnected : function (data) {

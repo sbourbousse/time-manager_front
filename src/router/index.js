@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-// import User from '../components/User.vue'
 import Welcome from '../components/Welcome.vue';
 import WorkingTimes from '../components/WorkingTimes.vue';
 
@@ -7,6 +6,12 @@ function navGuard (to, from, next) {
   console.log(to);
   console.log(from)
   console.log(next)
+  let userId = localStorage.getItem("userId");
+  if (userId) {
+    next()
+  } else {
+    alert("You must be connected to access this page")
+  }
 }
 
 const routes = [

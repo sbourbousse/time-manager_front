@@ -23,9 +23,6 @@
         Time Manager
       </div>
     </div>
-
-
-
     <div id="dashboard-container">
       <div class="dashboard-left">
         <User/>
