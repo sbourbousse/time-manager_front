@@ -3,16 +3,20 @@
     <div id="dashboard-navbar">
       <div class="navbar-link-container">
         <div class="navbar-link-item">
-          <router-link to="/">Home</router-link>
+          <router-link class="link-item-text" to="/">Home</router-link>
+          <fa class="link-item-icon" icon="home"/>
         </div>
         <div class="navbar-link-item">
-          <router-link to="/workingtimes">Working Times</router-link>
+          <router-link class="link-item-text" to="/workingtimes">Working Times</router-link>
+          <fa class="link-item-icon" icon="user-clock"/>
         </div>
         <div class="navbar-link-item">
-          <router-link to="/">Clock Manager</router-link>
+          <router-link class="link-item-text" to="/">Clock Manager</router-link>
+          <fa class="link-item-icon" icon="stopwatch"/>
         </div>
         <div class="navbar-link-item">
-          <router-link to="/">Chart Manager</router-link>
+          <router-link class="link-item-text" to="/">Chart Manager</router-link>
+          <fa class="link-item-icon" icon="chart-pie"/>
         </div>
       </div>
       <div class="navbar-right">
@@ -24,7 +28,7 @@
 
     <div id="dashboard-container">
       <div class="dashboard-left">
-        <User style="height: 350px"/>
+        <User/>
       </div>
       <div class="dashboard-right">
         <router-view/>
@@ -35,6 +39,9 @@
 
 <script>
 import User from '../components/User.vue'
+// import { library } from '@fortawesome/fontawesome-svg-core'
+// import { faUserSecret } from '@fortawesome/free-solid-svg-icons'
+// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 export default {
   name: 'Dashboard',
   components: {
@@ -79,6 +86,10 @@ export default {
     margin: 0px 10px;
     border-radius: 15px;
     cursor: pointer;
+    height: 2.2em;
+    display: flex;
+    align-items: center ;
+    text-align: center;
   }
 
   #dashboard-navbar .navbar-link-container .navbar-link-item:hover {
@@ -95,10 +106,7 @@ export default {
   }
 
   #dashboard-container {
-    width: calc(100% - 100px);
-    margin: 30px 50px;
     display: flex;
-    height: calc(100% - 80px) /* Navbars height */;
   }
   #dashboard-container>div {
     display: flex;
@@ -107,10 +115,68 @@ export default {
     height: 100%;
     width: 100%;
   }
-  #dashboard-container .dashboard-left {
-    width : 30%
+    
+  .navbar-link-container .link-item-icon {
+    color:#44BBA4
   }
-  #dashboard-container .dashboard-right {
-    width : 70%;
+
+
+
+
+
+  @media screen and (max-width: 640px) {
+    #dashboard-container {
+      flex-direction: column;
+      width: calc(100% - 50px);
+      margin: 30px 25px;
+      height: auto;
+    }
+    #dashboard-container .dashboard-left {
+      min-width : 100%;
+    }
+    #dashboard-container .dashboard-right {
+      min-width : 100%;
+      text-align: center;
+    }
+    #dashboard-navbar {
+      position: fixed;
+      bottom: 0px;
+      overflow-y: scroll;
+    }
+    #dashboard-navbar .navbar-link-container {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+      align-items: center;
+    }
+    .navbar-link-container .link-item-text {
+      display: none;
+    }
+    .navbar-link-container .link-item-icon {
+      display: unset;
+    }
+    #dashboard-navbar .navbar-right {
+      display: none;
+    }
+  }
+
+  @media screen and (min-width: 640px) {
+    #dashboard-container {
+      width: calc(100% - 100px);
+      margin: 30px 50px;
+      height: calc(100% - 80px) /* Navbars height */;
+    }
+    #dashboard-container .dashboard-left {
+      width : 30%;
+    }
+    #dashboard-container .dashboard-right {
+      width : 70%;
+    }
+    .navbar-link-container .link-item-text {
+      display: unset;
+    }
+    .navbar-link-container .link-item-icon {
+      display: none;
+    }
   }
 </style>

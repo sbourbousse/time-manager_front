@@ -188,6 +188,7 @@ export default {
     align-items: center;
     height: 100%;
     justify-content: space-around;
+    margin: 0.5em 0px;
 }
 .form-row.form-row-wrap {
     flex-wrap: wrap;
