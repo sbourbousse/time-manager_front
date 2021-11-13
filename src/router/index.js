@@ -2,13 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Welcome from '../components/Welcome.vue';
 import WorkingTimes from '../components/WorkingTimes.vue';
 import Clock from '../components/Clock.vue';
+import Login from '../components/Login.vue'
 
 function navGuard (to, from, next) {
-  // console.log(to);
-  // console.log(from)
-  // console.log(next)
-  let userId = localStorage.getItem("userId");
-  if (userId) {
+  let jwt = localStorage.getItem("jwt");
+  if (jwt) {
     next()
   } else {
     alert("You must be connected to access this page")
@@ -17,9 +15,15 @@ function navGuard (to, from, next) {
 
 const routes = [
   {
+    path: '/login',
+    name: 'Login',
+    component: Login,
+  },
+  {
     path: '/',
     name: 'Welcome',
-    component: Welcome
+    component: Welcome,
+    beforeEnter : navGuard
   },
   {
     path: '/workingtimes',

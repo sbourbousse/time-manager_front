@@ -81,3 +81,57 @@ input {
     align-items: center;
     color: #E7BB41;
 }
+
+
+/* DASHBOARD MENU */
+#dashboard-main {
+    height: 100%;
+    width: 100%;
+}
+
+#dashboard-container {
+    display: flex;
+}
+#dashboard-container>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+    width: 100%;
+}
+
+@media screen and (max-width: 640px) {
+    #dashboard-main {
+        padding-bottom: 80px;
+    }
+    #dashboard-container {
+        flex-direction: column;
+        width: calc(100% - 50px);
+        margin: 30px 25px;
+        height: auto;
+        padding-bottom: 80px;
+    }
+    #dashboard-container .dashboard-left {
+        min-width : 100%;
+    }
+    #dashboard-container .dashboard-right {
+        min-width : 100%;
+        text-align: center;
+    }
+}
+
+@media screen and (min-width: 640px) {
+    #dashboard-container {
+        width: calc(100% - 100px);
+        margin: 30px 50px;
+        height: calc(100% - 80px) /* Navbars height */;
+    }
+    #dashboard-container .dashboard-left {
+        width : 600px;
+    }
+    #dashboard-container .dashboard-right {
+        width: calc(100% - 600px);
+        padding-left: 4em;
+        min-width: 500px;
+    }
+}
