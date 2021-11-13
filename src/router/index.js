@@ -4,9 +4,9 @@ import WorkingTimes from '../components/WorkingTimes.vue';
 import Clock from '../components/Clock.vue';
 
 function navGuard (to, from, next) {
-  console.log(to);
-  console.log(from)
-  console.log(next)
+  // console.log(to);
+  // console.log(from)
+  // console.log(next)
   let userId = localStorage.getItem("userId");
   if (userId) {
     next()

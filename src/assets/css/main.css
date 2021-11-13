@@ -72,3 +72,12 @@ input {
     transition-duration: 500ms;
     transition-property: box-shadow;
 }
+
+.title-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: #E7BB41;
+}

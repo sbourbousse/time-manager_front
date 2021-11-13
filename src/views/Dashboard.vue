@@ -122,11 +122,15 @@ export default {
 
 
   @media screen and (max-width: 640px) {
+    #dashboard-main {
+      padding-bottom: 80px;
+    }
     #dashboard-container {
       flex-direction: column;
       width: calc(100% - 50px);
       margin: 30px 25px;
       height: auto;
+      padding-bottom: 80px;
     }
     #dashboard-container .dashboard-left {
       min-width : 100%;
@@ -137,8 +141,9 @@ export default {
     }
     #dashboard-navbar {
       position: fixed;
-      bottom: 0px;
+      bottom: -1px;
       overflow-y: scroll;
+      z-index: 11;
     }
     #dashboard-navbar .navbar-link-container {
       display: flex;
@@ -167,8 +172,9 @@ export default {
       width : 600px;
     }
     #dashboard-container .dashboard-right {
-      width: auto;
+      width: calc(100% - 600px);
       padding-left: 4em;
+      min-width: 500px;
     }
     .navbar-link-container .link-item-text {
       display: unset;
