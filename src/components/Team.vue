@@ -15,7 +15,7 @@
                 </div>  
                 <div class="form-row">
                     <button v-on:click="createTeam()" class="form-action-button">Create</button>
-                    <button v-on:click="joinTeam()" class="form-action-button">Join</button>
+                    <button v-on:click="joinTeam(inputTeamId)" class="form-action-button">Join</button>
                 </div>  
             </div>
         </div>
@@ -102,7 +102,7 @@ export default {
 
 
     #teams-container {
-        height: 100%;
+        height: auto;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
@@ -116,9 +116,6 @@ export default {
         margin: 10px 0px;
     }
     @media screen and (min-width: 640px) {
-        #teams-container {
-        margin-left: 50px;
-        }
         #teams-container .single-team {
             width: 200px; 
         }

@@ -22,6 +22,20 @@ body {
     height: 100%;
 }
 
+@media screen and (max-width: 640px) {
+    #app::-webkit-scrollbar {
+        display: none;
+    }
+    
+    #app::-webkit-scrollbar-track {
+        display: none;
+    }
+    
+    #app::-webkit-scrollbar-thumb {
+        display: none;
+    }
+}
+
 input {
     border-radius: 5px;
     border : solid 2px #393E41
@@ -75,7 +89,7 @@ input {
 
 .title-container {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -85,7 +99,7 @@ input {
 
 /* DASHBOARD MENU */
 #dashboard-main {
-    height: 100%;
+    height: calc(100% - 110px);
     width: 100%;
   }
 
