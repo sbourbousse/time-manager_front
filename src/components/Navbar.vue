@@ -14,8 +14,8 @@
           <router-link to="/clock"><fa class="link-item-icon" icon="stopwatch"/></router-link>
         </div>
         <div class="navbar-link-item">
-          <router-link class="link-item-text" to="/">Chart Manager</router-link>
-          <router-link to="/"><fa class="link-item-icon" icon="chart-pie"/></router-link>
+          <router-link class="link-item-text" to="/team">Chart Manager</router-link>
+          <router-link to="/team"><fa class="link-item-icon" icon="chart-pie"/></router-link>
         </div>
       </div>
       <div class="navbar-right">
