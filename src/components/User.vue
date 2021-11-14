@@ -8,15 +8,15 @@
                 <label for="">ID : </label>
                 <input v-model="id" type="text">
             </div>
-            <div v-if="connected" class="form-row">
+            <div v-if="connected || newUser" class="form-row">
                 <label for="">Email : </label>
                 <input v-model="email" type="text">
             </div>
-            <div v-if="connected" class="form-row">
+            <div v-if="connected || newUser" class="form-row">
                 <label for="">Firstname : </label>
                 <input v-model="firstname" type="text">
             </div>
-            <div v-if="connected" class="form-row">
+            <div v-if="connected || newUser" class="form-row">
                 <label for="">Lastname : </label>
                 <input v-model="lastname" type="text">
             </div>
@@ -24,20 +24,22 @@
                 <label for="">Username : </label>
                 <input v-model="username" type="text">
             </div>
-            <div v-if="!connected" class="form-row">
+            <div v-if="!connected || newUser" class="form-row">
                 <label for="">Password : </label>
                 <input v-model="password" type="password">
             </div>
 
             <div class="form-row form-row-wrap">
-                <button class="form-action-button" v-on:click="createUser()">Create</button>
-                <button class="form-action-button" v-on:click="updateUser()">Update</button>
-                <button class="form-action-button" v-on:click="getInfos()">Get Infos</button>
-                <button class="form-action-button" v-on:click="deleteUser()">Delete</button>
-                <button class="form-action-button" v-if="!connected" v-on:click="connect()" style="background:#E7BB41">Connect</button>
+                <button class="form-action-button" v-if="!connected && newUser" v-on:click="createUser()" style="background:#E7BB41">Sign up</button>
+                <button class="form-action-button" v-if="connected" v-on:click="updateUser()">Update</button>
+                <button class="form-action-button" v-if="connected" v-on:click="getInfos()">Get Infos</button>
+                <button class="form-action-button" v-if="connected" v-on:click="deleteUser()">Delete</button>
+                <button class="form-action-button" v-if="!connected && !newUser" v-on:click="connect()" style="background:#E7BB41">Connect</button>
                 <button class="form-action-button" v-if="connected" v-on:click="disconnect()" style="background:#E7BB41">Disconnect</button>
                 <button class="form-action-button" v-if="connected" v-on:click="fillSelfInfos()">My infos</button>
                 <button class="form-action-button" v-if="connected" v-on:click="clearFields()">Clear</button>
+                <button class="form-action-button" v-if="!connected && !newUser" v-on:click="toggleNewUser()">New user</button>
+                <button class="form-action-button" v-if="!connected && newUser" v-on:click="toggleNewUser()">Already registered</button>
             </div>
             <div class="form-row" v-if="connected">
                 <p>Connected as {{connectedUsername}}</p>
@@ -62,7 +64,8 @@ export default {
         id : "",
         password : "",
         connected : false,
-        connectedUsername: ""
+        connectedUsername: "",
+        newUser: false
     }
   },
   updated() {
@@ -80,21 +83,23 @@ export default {
             alert(this.checkUsernameAndEmail());
             return;
         } 
-            
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({user : { 
-                username :  this.username,
-                email : this.email
-            }})
-        };
-        const response = await fetch("http://localhost:4000/api/users", requestOptions);
-        const data = await response.json();
+        const body = {
+            user : {
+                firstname : this.firstname,
+                lastname : this.lastname,
+                mail : this.email,
+                password : this.password,
+                role : 0,
+                username : this.username
+            }
+        }
+        const { data } = await this.customFetch("POST", "users/sign_up", body)
+        
         if(data.errors) {
             alert("An error occured")
         } else if (data.data) {
             this.id = data.data.id
+            this.connect();
         }
     },
     updateUser : async function () {
@@ -105,17 +110,21 @@ export default {
             alert("ID must not be blank")
             return;
         }
-            
-        const requestOptions = {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({user : { 
-                username :  this.username,
-                email : this.email
-            }})
-        };
-        const response = await fetch("http://localhost:4000/api/users/"+this.id, requestOptions);
-        const data = await response.json();
+
+        let selfInfo = JSON.parse(localStorage.getItem("user"))
+        let body = {
+            user : {
+                firstname : this.firstname,
+                lastname : this.lastname,
+                mail : this.email,
+                password : selfInfo.password,
+                role : 0,
+                username : this.username,
+                changePassword : false,
+            }
+        }
+        const { data } = await this.customFetch("PUT", `users/${this.id}`, body)
+
         if(data.errors) {
             alert("An error occured")
         } else if (data.data) {
@@ -126,14 +135,8 @@ export default {
         if (this.id == "") {
             alert("ID must not be blank")
             return;
-        }
-        let jwt = localStorage.getItem("jwt")
-        const requestOptions = {
-            method: "GET",
-            headers: { "security": jwt },
-        };
-        const response = await fetch(`http://localhost:4000/api/users/${this.id}`, requestOptions);
-        const data = await response.json();
+        }        
+        const { data } = await this.customFetch("GET", `users/${this.id}`)
         this.username = data.data.username;
         this.firstname = data.data.firstname;
         this.lastname = data.data.lastname;
@@ -145,15 +148,13 @@ export default {
             alert("ID must not be blank")
             return;
         }
-        const requestOptions = {
-            method: "DELETE",
-            headers: { "Content-Type": "application/json" },
-        };
-        const response = await fetch("http://localhost:4000/api/users/"+this.id, requestOptions);
+        const {response} = await this.customFetch("DELETE", `users/${this.id}`)
         if(response.status == 204) {
             alert("User deleted successfuly")
         } else if (response.status == 404) {
             alert("User not found")
+        } else if (response.status == 401) {
+            alert("Unauthorized operation")
         } else {
             alert("An error occured")
         }
@@ -172,17 +173,12 @@ export default {
             alert(this.checkUsernameAndPassword());
             return;
         } 
-            
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                username :  this.username,
-                password : this.password
-                })
-        };
-        const response = await fetch("http://localhost:4000/api/users/sign_in", requestOptions);
-        const data = await response.json();
+        const body = {
+            username :  this.username,
+            password : this.password
+        }
+        const { response, data } = await this.customFetch("POST", 'users/sign_in', body)
+
         if(response.status == 404) {
             alert("Bad Username or Password")
         } else if ( response.status == 200) {
@@ -219,6 +215,7 @@ export default {
             this.id = payLoad.userID
         }
         let user = await this.getInfos();
+        this.newUser = false;
         this.connected = true;
         this.connectedUsername = user.username
         localStorage.setItem("user", JSON.stringify(user))
@@ -257,6 +254,9 @@ export default {
         this.firstname = "";
         this.lastname = "";
         this.id = "";
+    },
+    toggleNewUser : function () {
+        this.newUser = !this.newUser
     }
   }
 }

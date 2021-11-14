@@ -1,4 +1,7 @@
 <template>
+    <div class="title-container">
+        <h1>Current {{ range }} Working Times</h1>
+    </div>
     <div id="working-times-container">
         <WorkingTime 
         class="single-working-time" v-for="(workingTime, index) in workingTimes" 
@@ -8,6 +11,8 @@
 </template>
 <script>
 import WorkingTime from './WorkingTime.vue'
+import moment from "moment";
+
 export default {
     name: "WorkingTimes",
     components: {
@@ -15,22 +20,33 @@ export default {
     },
     data : function () {
         return {
-            workingTimes : []
+            workingTimes : [],
+            range : "month"
         }
     },
     mounted : async function () {
         this.workingTimes = await this.getWorkingTimes()
-        console.log(this.workingTimes)
     },
     methods : {
-        getWorkingTimes : async function () {
-            const response = await fetch(`http://localhost:4000/api/workingtimes/user/${this.getConnectedUser()}?start=1970-01-01 00:00:00&end=2040-12-31 23:59:59`);
-            const data = await response.json();
+        getWorkingTimes : async function (date = null) {
+            if (!date) date = moment(); //Current date
+            let start, end;
+            if (this.range == "month") {
+                start = moment().startOf("month")
+                end = moment().endOf("month")
+            }
+            let startStr = start.format("YYYY-MM-DD HH:mm:ss")
+            let endStr = end.format("YYYY-MM-DD HH:mm:ss")
+            let user = JSON.parse(localStorage.getItem("user"))
+            let body = {
+                start : startStr,
+                end : endStr
+            }
+            const { data } = await this.customFetch("POST", `workingtimes/user/${user.id}`, body)
+
+            this.rangeStart = start;
+            this.rangeEnd = end;
             return data.data;
-        },
-        getConnectedUser : function () {
-            let userId = localStorage.getItem("userId");
-            return userId;
         }
     }
 }
